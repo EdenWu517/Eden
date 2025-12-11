@@ -21,6 +21,14 @@ const orbitron = Orbitron({
 export const metadata: Metadata = {
   title: "次世代行動創新應用Demo Day",
   description: "次世代行動創新應用Demo Day",
+  icons: {
+    icon: [
+      { url: "/itri.png", type: "image/png", sizes: "any" },
+      { url: "/itri.png", rel: "shortcut icon" },
+      { url: "/favicon.ico" }, // fallback
+    ],
+    apple: [{ url: "/itri.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({
