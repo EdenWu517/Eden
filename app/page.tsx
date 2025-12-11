@@ -63,7 +63,7 @@ export default function Home() {
             首頁
           </Link>
           <Link
-            href="#agenda"
+            href="/agenda"
             className="px-5 py-2 rounded-lg bg-black/30 text-cyan-200 font-semibold tracking-wide text-base md:text-lg shadow transition-all duration-300 
               hover:bg-cyan-600/30 hover:text-white hover:-translate-y-1 hover:scale-105
               active:scale-95 outline-none focus:ring-2 focus:ring-cyan-500"
@@ -108,7 +108,7 @@ export default function Home() {
                 style={{ animationDelay: "0s" }}
               >
                 <span className="absolute inset-x-0 -bottom-3 mx-auto h-0.5 w-20 bg-gradient-to-r from-transparent via-cyan-300/80 to-transparent" aria-hidden />
-                <span className="block break-words whitespace-normal">次世代行動創新成果</span>
+                <span className="block break-words whitespace-normal">次世代行動創新應用</span>
                 <span className="block mt-2 break-words whitespace-normal">Demo Day</span>
               </h1>
             </div>
@@ -217,7 +217,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="w-full bg-gradient-to-r from-indigo-950 to-gray-950 py-6 mt-auto text-center relative z-10 max-w-full px-4">
         <div className="text-cyan-100 text-sm tracking-wider select-none break-words whitespace-normal">
-          Copyright © 2026 次世代論壇
+          Copyright © 次世代行動創新應用Demo Day
         </div>
       </footer>
       {/* 右下角浮動報名按鈕 */}

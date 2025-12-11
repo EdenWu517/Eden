@@ -19,8 +19,8 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "次世代行動成果Demo Day",
-  description: "次世代行動成果Demo Day",
+  title: "次世代行動創新應用Demo Day",
+  description: "次世代行動創新應用Demo Day",
 };
 
 export default function RootLayout({
