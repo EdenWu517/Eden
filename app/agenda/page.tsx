@@ -33,10 +33,10 @@ export default function AgendaPage() {
               <span className="flex items-center justify-center w-7 h-7 bg-cyan-500 rounded-full -left-4 absolute border-4 border-blue-950 shadow-lg"></span>
               <div className="ml-8">
                 <time className="block text-cyan-300 text-lg font-bold mb-1 tracking-wide drop-shadow">
-                  09:00
+                  09:30
                 </time>
                 <div className="text-white text-xl font-semibold mb-2">
-                  報到與交流
+                  與會者報到
                 </div>
               </div>
             </li>
@@ -47,7 +47,7 @@ export default function AgendaPage() {
                   10:00
                 </time>
                 <div className="text-white text-xl font-semibold mb-2">
-                  開幕演講：未來的邊界
+                  貴賓致詞與合照
                 </div>
               </div>
             </li>
@@ -79,7 +79,7 @@ export default function AgendaPage() {
       {/* Footer */}
       <footer className="w-full bg-gradient-to-r from-indigo-950 to-gray-950 py-6 mt-auto text-center relative z-10">
         <div className="text-cyan-100 text-sm tracking-wider select-none">
-          Copyright © 2026 次世代論壇
+          Copyright © 2026 次世代行動創新應用Demo Day
         </div>
       </footer>
     </div>
