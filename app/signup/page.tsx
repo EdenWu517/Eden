@@ -10,10 +10,88 @@ function classNames(...args: any[]) {
 export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const formRef = useRef<HTMLFormElement>(null);
+
+  const validateForm = (formData: FormData): Record<string, string> => {
+    const errors: Record<string, string> = {};
+    
+    // Name validation: required, max 50 characters
+    const name = formData.get('name')?.toString().trim() || '';
+    if (!name) {
+      errors.name = '姓名為必填項目';
+    } else if (name.length > 50) {
+      errors.name = '姓名不能超過50個字元';
+    }
+    
+    // Organization validation: required, max 100 characters
+    const org = formData.get('org')?.toString().trim() || '';
+    if (!org) {
+      errors.org = '服務機構為必填項目';
+    } else if (org.length > 100) {
+      errors.org = '服務機構不能超過100個字元';
+    }
+    
+    // Title validation: required, max 50 characters
+    const title = formData.get('title')?.toString().trim() || '';
+    if (!title) {
+      errors.title = '職稱為必填項目';
+    } else if (title.length > 50) {
+      errors.title = '職稱不能超過50個字元';
+    }
+    
+    // Phone validation: exactly 10 digits, must start with 0
+    const phone = formData.get('phone')?.toString().trim() || '';
+    const phoneDigits = phone.replace(/\D/g, ''); // Remove non-digits
+    if (!phone) {
+      errors.phone = '電話號碼為必填項目';
+    } else if (phoneDigits.length !== 10) {
+      errors.phone = '電話號碼必須為10位數字';
+    } else if (!phoneDigits.startsWith('0')) {
+      errors.phone = '電話號碼必須以0開頭（例如：0912345678）';
+    }
+    
+    // Email validation: required, valid email format, max 100 characters
+    const email = formData.get('email')?.toString().trim() || '';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      errors.email = '電子信箱為必填項目';
+    } else if (email.length > 100) {
+      errors.email = '電子信箱不能超過100個字元';
+    } else if (!emailRegex.test(email)) {
+      errors.email = '請輸入有效的電子信箱格式';
+    }
+    
+    // Diet validation: required
+    const diet = formData.get('diet')?.toString();
+    if (!diet) {
+      errors.diet = '飲食習慣為必填項目';
+    }
+    
+    return errors;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Only allow digits, max 10 digits, must start with 0
+    let value = e.target.value.replace(/\D/g, '').slice(0, 10);
+    // If user starts typing and first digit is not 0, force it to start with 0
+    if (value.length > 0 && !value.startsWith('0')) {
+      value = '0' + value.replace(/^0+/, '').slice(0, 9); // Remove leading zeros and keep max 9 more digits
+    }
+    e.target.value = value;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const validationErrors = validateForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    
+    setErrors({});
     setLoading(true);
     try {
       await fetch(
@@ -21,7 +99,7 @@ export default function SignupPage() {
         {
           method: 'POST',
           mode: 'no-cors',
-          body: new FormData(e.currentTarget),
+          body: formData,
         }
       );
       setDone(true);
@@ -91,9 +169,13 @@ export default function SignupPage() {
                 type="text"
                 id="name"
                 name="name"
-                className="w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70"
+                maxLength={50}
+                className={`w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70 ${
+                  errors.name ? 'ring-2 ring-red-400' : ''
+                }`}
                 autoComplete="off"
               />
+              {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
             </div>
             <div>
               <label htmlFor="org" className="block mb-1 text-cyan-100 font-semibold">
@@ -104,9 +186,13 @@ export default function SignupPage() {
                 type="text"
                 id="org"
                 name="org"
-                className="w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70"
+                maxLength={100}
+                className={`w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70 ${
+                  errors.org ? 'ring-2 ring-red-400' : ''
+                }`}
                 autoComplete="off"
               />
+              {errors.org && <p className="text-red-400 text-sm mt-1">{errors.org}</p>}
             </div>
             <div>
               <label htmlFor="title" className="block mb-1 text-cyan-100 font-semibold">
@@ -117,9 +203,13 @@ export default function SignupPage() {
                 type="text"
                 id="title"
                 name="title"
-                className="w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70"
+                maxLength={50}
+                className={`w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70 ${
+                  errors.title ? 'ring-2 ring-red-400' : ''
+                }`}
                 autoComplete="off"
               />
+              {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title}</p>}
             </div>
             <div>
               <label htmlFor="phone" className="block mb-1 text-cyan-100 font-semibold">
@@ -130,9 +220,17 @@ export default function SignupPage() {
                 type="tel"
                 id="phone"
                 name="phone"
-                className="w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70"
+                inputMode="numeric"
+                pattern="[0-9]{10}"
+                maxLength={10}
+                onChange={handlePhoneChange}
+                className={`w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70 ${
+                  errors.phone ? 'ring-2 ring-red-400' : ''
+                }`}
                 autoComplete="off"
+                placeholder="0912345678"
               />
+              {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
             </div>
             <div>
               <label htmlFor="email" className="block mb-1 text-cyan-100 font-semibold">
@@ -143,9 +241,13 @@ export default function SignupPage() {
                 type="email"
                 id="email"
                 name="email"
-                className="w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70"
+                maxLength={100}
+                className={`w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70 ${
+                  errors.email ? 'ring-2 ring-red-400' : ''
+                }`}
                 autoComplete="off"
               />
+              {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
             </div>
             <div>
               <label className="block mb-2 text-cyan-100 font-semibold">
@@ -173,6 +275,7 @@ export default function SignupPage() {
                   <span>素</span>
                 </label>
               </div>
+              {errors.diet && <p className="text-red-400 text-sm mt-1">{errors.diet}</p>}
             </div>
 
             <button
