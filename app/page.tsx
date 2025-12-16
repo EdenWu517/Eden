@@ -5,40 +5,9 @@ import Link from "next/link";
 import Countdown from "../components/Countdown";
 import FadeIn from "../components/FadeIn";
 import SponsorMarquee from "../components/SponsorMarquee";
-import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
-function HoverScaleCountdown() {
-  // 用 pointer enter/leave 控制 hover 狀態
-  const [hovering, setHovering] = useState(false);
-  return (
-    <div
-      className={`transition-all duration-200 ${
-        hovering
-          ? "scale-105 -translate-y-1 shadow-[0_0_32px_rgba(34,211,238,0.45)]"
-          : ""
-      }`}
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
-      style={{
-        borderRadius: "1rem",
-      }}
-    >
-      <Countdown />
-    </div>
-  );
-}
-
-import { useCallback } from "react";
-
 export default function Home() {
-  // 首頁平滑滾動至頂端
-  const handleHomeClick = useCallback((e: React.MouseEvent) => {
-    if (typeof window !== "undefined" && window.location.pathname === "/") {
-      e.preventDefault();
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    }
-  }, []);
 
   return (
     <div
@@ -50,36 +19,6 @@ export default function Home() {
         backgroundPosition: "center",
       }}
     >
-      {/* 滑鼠移上時有互動效果的主頁選單 */}
-      <div className="fixed top-0 left-0 w-full z-50 flex justify-end p-5 backdrop-blur-md bg-gradient-to-r from-black/70 via-blue-950/50 to-transparent">
-        <nav className="flex gap-5 md:gap-8 pr-2">
-          <Link
-            href="/"
-            className="px-5 py-2 rounded-lg bg-black/30 text-cyan-200 font-semibold tracking-wide text-base md:text-lg shadow transition 
-              hover:bg-cyan-600/30 hover:text-white hover:-translate-y-1 hover:scale-105
-              active:scale-95 outline-none focus:ring-2 focus:ring-cyan-500"
-            onClick={handleHomeClick}
-          >
-            首頁
-          </Link>
-          <Link
-            href="/agenda"
-            className="px-5 py-2 rounded-lg bg-black/30 text-cyan-200 font-semibold tracking-wide text-base md:text-lg shadow transition-all duration-300 
-              hover:bg-cyan-600/30 hover:text-white hover:-translate-y-1 hover:scale-105
-              active:scale-95 outline-none focus:ring-2 focus:ring-cyan-500"
-          >
-            議程
-          </Link>
-          <Link
-            href="/signup"
-            className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-400/80 to-blue-600/80 text-white font-bold tracking-wide text-base md:text-lg shadow-lg transition 
-              hover:from-cyan-300 hover:to-blue-500 hover:-translate-y-1 hover:scale-105
-              active:scale-95 outline-none focus:ring-2 focus:ring-cyan-300"
-          >
-            我要報名
-          </Link>
-        </nav>
-      </div>
 
       {/* 背景層移除，直接用根div的 fixed background */}
       {/* <div
@@ -115,6 +54,15 @@ export default function Home() {
             {/* Countdown 元件置中，hover 效果取消，只顯示一般狀態 */}
             <div className="flex justify-center w-full my-8 max-w-full">
               <Countdown />
+            </div>
+            {/* 報名按鈕 - 放在計時器下方 */}
+            <div className="flex justify-center w-full mt-8 max-w-full">
+              <Link
+                href="/signup"
+                className="px-8 py-4 rounded-lg bg-gradient-to-r from-cyan-400/80 to-blue-600/80 text-white font-bold tracking-wide text-lg md:text-xl shadow-lg transition-all duration-200 hover:from-cyan-300 hover:to-blue-500 hover:-translate-y-1 hover:scale-105 active:scale-95 outline-none focus:ring-2 focus:ring-cyan-300"
+              >
+                我要報名
+              </Link>
             </div>
           </section>
         </FadeIn>
@@ -172,6 +120,64 @@ export default function Home() {
                 </div>
               </div>
             </FadeIn>
+          </div>
+        </section>
+      </FadeIn>
+      {/* 議程區塊 - 放在亮點下方、地圖上方 */}
+      <FadeIn>
+        <section className="w-full flex flex-col items-center z-10 mt-16 px-4 pb-16 relative max-w-full">
+          <h2 className="text-white text-xl md:text-3xl font-bold mb-10 tracking-wide flex items-center gap-4 justify-center text-center break-words whitespace-normal">
+            <span className="inline-block h-1 w-8 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
+            活動議程
+            <span className="inline-block h-1 w-8 bg-gradient-to-l from-teal-400 to-cyan-400 rounded-full" />
+          </h2>
+          <div className="max-w-xl w-full">
+            <ol className="relative border-s-2 border-cyan-600 ml-4">
+              <li className="mb-12 last:mb-0 flex items-start group">
+                <span className="flex items-center justify-center w-7 h-7 bg-cyan-500 rounded-full -left-4 absolute border-4 border-blue-950 shadow-lg"></span>
+                <div className="ml-8">
+                  <time className="block text-cyan-300 text-lg font-bold mb-1 tracking-wide drop-shadow">
+                    09:30
+                  </time>
+                  <div className="text-white text-xl font-semibold mb-2">
+                    與會者報到
+                  </div>
+                </div>
+              </li>
+              <li className="mb-12 last:mb-0 flex items-start group">
+                <span className="flex items-center justify-center w-7 h-7 bg-cyan-500 rounded-full -left-4 absolute border-4 border-blue-950 shadow-lg"></span>
+                <div className="ml-8">
+                  <time className="block text-cyan-300 text-lg font-bold mb-1 tracking-wide drop-shadow">
+                    10:00
+                  </time>
+                  <div className="text-white text-xl font-semibold mb-2">
+                    貴賓致詞與合照
+                  </div>
+                </div>
+              </li>
+              <li className="mb-12 last:mb-0 flex items-start group">
+                <span className="flex items-center justify-center w-7 h-7 bg-cyan-500 rounded-full -left-4 absolute border-4 border-blue-950 shadow-lg"></span>
+                <div className="ml-8">
+                  <time className="block text-cyan-300 text-lg font-bold mb-1 tracking-wide drop-shadow">
+                    12:00
+                  </time>
+                  <div className="text-white text-xl font-semibold mb-2">
+                    午餐
+                  </div>
+                </div>
+              </li>
+              <li className="flex items-start group">
+                <span className="flex items-center justify-center w-7 h-7 bg-cyan-500 rounded-full -left-4 absolute border-4 border-blue-950 shadow-lg"></span>
+                <div className="ml-8">
+                  <time className="block text-cyan-300 text-lg font-bold mb-1 tracking-wide drop-shadow">
+                    13:30
+                  </time>
+                  <div className="text-white text-xl font-semibold mb-2">
+                    分組論壇
+                  </div>
+                </div>
+              </li>
+            </ol>
           </div>
         </section>
       </FadeIn>
