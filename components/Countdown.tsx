@@ -28,9 +28,9 @@ const CountdownBox = React.memo(function CountdownBox({
 }) {
   return (
     <div
-      className="flex flex-col items-center px-4 py-3 rounded-xl shadow-lg"
+      className="flex flex-col items-center px-2 md:px-4 py-3 rounded-xl shadow-lg"
       style={{
-        minWidth: "72px",
+        minWidth: "48px",
         transition: "background 0.3s",
       }}
     >
@@ -60,14 +60,14 @@ const CountdownSkeleton = React.memo(function CountdownSkeleton({
 }) {
   return (
     <div
-      className="flex flex-col items-center px-4 py-3 rounded-xl shadow-lg"
+      className="flex flex-col items-center px-2 md:px-4 py-3 rounded-xl shadow-lg"
       style={{
-        minWidth: "72px",
+        minWidth: "48px",
         transition: "background 0.3s",
       }}
     >
       <span
-        className="font-extrabold text-white text-5xl md:text-7xl font-mono transition-all duration-200 ease-in-out bg-cyan-400/30 rounded animate-pulse w-16 h-14 md:w-24 md:h-20 flex items-center justify-center"
+        className="font-extrabold text-white text-5xl md:text-7xl font-mono transition-all duration-200 ease-in-out bg-cyan-400/30 rounded animate-pulse w-12 md:w-24 h-14 md:h-20 flex items-center justify-center"
         style={{
           lineHeight: "1.1",
           letterSpacing: "0.02em",
@@ -105,7 +105,7 @@ export default function Countdown() {
 
       // 精確校正 interval：讓倒數能準確跳秒
       const now = new Date();
-      const msUntilNextSecond = 1000 - (now.getMilliseconds());
+      const msUntilNextSecond = 1000 - now.getMilliseconds();
       // 先 setTimeout 再進入 setInterval
       const timeout = setTimeout(() => {
         tick();
@@ -124,10 +124,10 @@ export default function Countdown() {
   }, [mounted]);
 
   const boxes = [
-    { label: "天", value: pad(timeLeft.days) },
-    { label: "時", value: pad(timeLeft.hours) },
-    { label: "分", value: pad(timeLeft.minutes) },
-    { label: "秒", value: pad(timeLeft.seconds) },
+    { label: "DAY", value: pad(timeLeft.days) },
+    { label: "HR", value: pad(timeLeft.hours) },
+    { label: "MIN", value: pad(timeLeft.minutes) },
+    { label: "SEC", value: pad(timeLeft.seconds) },
   ];
 
   const skeletonBoxes = [
@@ -138,7 +138,7 @@ export default function Countdown() {
   ];
 
   return (
-    <div className="flex gap-4 items-center justify-center">
+    <div className="flex gap-2 md:gap-4 items-center justify-center">
       {!mounted
         ? skeletonBoxes.map((box) => (
             <CountdownSkeleton key={box.label} label={box.label} />
