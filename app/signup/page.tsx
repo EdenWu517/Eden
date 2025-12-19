@@ -1,7 +1,47 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+
+function QualificationModal({ show, onClose }: { show: boolean; onClose: () => void }) {
+  if (!show) return null;
+  return (
+    <div
+      className="fixed inset-0 z-[140] flex items-center justify-center"
+      aria-modal="true"
+      role="dialog"
+    >
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+        aria-label="關閉審核說明"
+      />
+      <div className="relative bg-white/95 dark:bg-[#131c25]/95 rounded-xl max-w-md w-[90vw] p-6 md:pt-8 md:px-8 md:pb-8 shadow-2xl z-10 text-gray-900 dark:text-gray-100">
+        <h2 className="text-lg md:text-xl font-bold mb-5 text-cyan-700 dark:text-cyan-200 flex items-center gap-2 justify-center">
+          資格審核說明
+        </h2>
+        <div className="text-gray-900 dark:text-gray-100 text-base md:text-lg leading-relaxed mb-7 whitespace-pre-line text-left">
+        由於活動場地空間有限，主辦單位將進行資格確認，
+
+最終審核結果將於活動前透過電子郵件通知：<br/>
+
+• 若報名成功，您將於活動前數日收到【報到通知信】及報到編號。<br/>
+
+• 若因名額限制無法安排，我們亦會寄發通知告知，感謝您的體諒。
+        </div>
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg font-bold text-lg shadow-md transition"
+          >
+            確認
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function classNames(...args: any[]) {
   return args.filter(Boolean).join(' ');
@@ -74,7 +114,13 @@ export default function SignupPage() {
   const [agreed, setAgreed] = useState(false); // 新增: 勾選狀態
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showToast, setShowToast] = useState(false); // (1) 新增 Toast 狀態
+  const [showQualification, setShowQualification] = useState(true); // 預設一進來就開啟資格審核 Modal
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    // 預設一進入頁面即開啟資格審核 Modal
+    setShowQualification(true);
+  }, []);
 
   const validateForm = (formData: FormData): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -103,15 +149,11 @@ export default function SignupPage() {
       errors.title = '職稱不能超過50個字元';
     }
 
-    // Phone validation: exactly 10 digits, must start with 0
+    // Phone validation: cannot be empty, no fixed length or starting digit requirement
     const phone = formData.get('phone')?.toString().trim() || '';
     const phoneDigits = phone.replace(/\D/g, ''); // Remove non-digits
     if (!phone) {
       errors.phone = '電話號碼為必填項目';
-    } else if (phoneDigits.length !== 10) {
-      errors.phone = '電話號碼必須為10位數字';
-    } else if (!phoneDigits.startsWith('0')) {
-      errors.phone = '電話號碼必須以0開頭（例如：0912345678）';
     }
 
     // Email validation: required, valid email format, max 100 characters
@@ -177,7 +219,7 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await fetch(
-        'https://script.google.com/macros/s/AKfycbwr8XfETeie6wHpG59CynQa2Iz57zEeM4rz1SqLS7xXW0DZs2zcaOT_vdhoRnikPN6T/exec',
+        'https://script.google.com/macros/s/AKfycbwWC9Xq20jKy_QjT7VNEHSbbMAmw374EkNhpn7PKq-UmEptj124mo0WdUCZCkdFAyrH/exec',
         {
           method: 'POST',
           mode: 'no-cors',
@@ -392,15 +434,10 @@ export default function SignupPage() {
                     type="tel"
                     id="phone"
                     name="phone"
-                    inputMode="numeric"
-                    pattern="[0-9]{10}"
-                    maxLength={10}
-                    onChange={handlePhoneChange}
                     className={`w-full rounded-lg bg-white/15 text-cyan-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-300 text-base font-medium placeholder:text-cyan-200/70 ${
                       errors.phone ? 'ring-2 ring-red-400' : ''
                     }`}
                     autoComplete="off"
-                    placeholder=""
                   />
                   {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
                 </div>
@@ -517,12 +554,14 @@ export default function SignupPage() {
                   </svg>
                 </div>
                 <div className="text-green-300 text-2xl font-bold mb-2">報名成功！</div>
-                <div className="text-cyan-100 text-lg font-medium text-center">我們已收到您的資料</div>
+                <div className="text-cyan-100 text-lg font-medium text-center">本單位將於5分鐘內寄送電子郵件，<br/>確認已收到您的報名資料<br/>如有相關問題請洽：eden@impr.com.tw</div>
               </div>
             )}
           </div>
         </section>
       </main>
+      {/* 資格審核 Modal */}
+      <QualificationModal show={showQualification} onClose={() => setShowQualification(false)} />
       {/* 個資聲明 Modal */}
       <PrivacyModal show={showPrivacy} onClose={() => setShowPrivacy(false)} />
       {/* (3) 警告 Toast */}

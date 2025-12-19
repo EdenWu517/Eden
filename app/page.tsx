@@ -83,7 +83,8 @@ export default function Home() {
       {/* 下方特色卡片區塊：加上標題，卡片直向排列，寬度不變 */}
      {/* 下方特色卡片區塊：已改為橫向三欄並排 (Grid) */}
      <FadeIn>
-        <section className="w-full flex flex-col items-center z-10 mt-16 px-4 pb-16 relative max-w-full">
+        <section id="highlight"
+        className="w-full flex flex-col items-center z-10 mt-16 px-4 pb-16 relative max-w-full">
           {/* 特色卡片標題 */}
           <h2 className="text-white text-xl md:text-3xl font-bold mb-12 tracking-wide flex items-center gap-4 justify-center text-center break-words whitespace-normal">
             <span className="inline-block h-1 w-8 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
@@ -92,27 +93,30 @@ export default function Home() {
           </h2>
 
           {/* 新增區塊：活動介紹文字（電腦版） */}
-          <div className="max-w-3xl mx-auto text-center text-cyan-100/80 text-base md:text-lg leading-relaxed mb-12 hidden md:block">
-            數位轉型不僅是口號，更是正在發生的進行式。<br />
-            由數位產業署指導，工業技術研究院與資訊工業策進會主辦的<br />「次世代行動創新應用 Demo Day」<br />將於 2026 年 1 月 16 日在大台南會展中心盛大登場。
-            <br /><br />
-            本次活動聚焦「智慧醫療」、「精準農業」與「數位韌性」三大主軸。<br />我們將展示 AI 與 5G 技術如何走出實驗室，深入急診室搶救生命、飛越農田守護作物，<br />並進入社區提供溫暖的心理輔療。
+          <div className="max-w-3xl mx-auto text-LEFT text-cyan-100/80 text-base md:text-lg leading-relaxed mb-12 hidden md:block">
+            數位轉型不僅是口號，更是正在發生的進行式。
+            由數位產業署指導，工業技術研究院與資訊工業策進會主辦的
+            「次世代行動創新應用 Demo Day」
+            將於 2026 年 1 月 16 日在大台南會展中心盛大登場。
+            
+            本次活動聚焦「智慧醫療」、「精準農業」與「數位韌性」三大主軸。
+            我們將展示 AI 與 5G 技術如何走出實驗室，深入急診室搶救生命、飛越農田守護作物，
+            並進入社區提供溫暖的心理輔療。
           </div>
 
           {/* 新增區塊：活動介紹文字（手機版讓伍編輯斷句） */}
-          <div className="max-w-3xl mx-auto text-center text-cyan-100/80 text-base leading-relaxed mb-12 block md:hidden">
+          <div className="max-w-3xl mx-auto text-LEFT text-cyan-100/80 text-base leading-relaxed mb-12 block md:hidden">
             {/* 手機版請在下列每一行內自由斷句 */}
             <div>
               數位轉型不僅是口號，
-              更是正在發生的進行式。<br />
+              更是正在發生的進行式。
               由數位產業署指導，
-              工業技術研究院與資訊工業策進會主辦的<br />「次世代行動創新應用 Demo Day」<br />
-              將於 2026 年 1 月 16 日<br />
+              工業技術研究院與資訊工業策進會主辦的「次世代行動創新應用 Demo Day」
+              將於 2026 年 1 月 16 日
               在大台南會展中心盛大登場。
-            </div>
-            <div className="mt-4">
-              本次活動聚焦<br />
-              「智慧醫療」、「精準農業」與「數位韌性」<br />三大主軸。
+            
+              本次活動聚焦
+              「智慧醫療」、「精準農業」與「數位韌性」三大主軸。
               我們將展示 AI 與 5G 技術
               如何走出實驗室，
               深入急診室搶救生命、
@@ -301,7 +305,8 @@ export default function Home() {
       </FadeIn>
       {/* 活動地點與交通資訊合併區塊 */}
       <FadeIn>
-        <section className="w-full flex flex-col items-center z-10 mt-16 px-4 pb-8 relative max-w-full">
+        <section id="map" 
+        className="w-full flex flex-col items-center z-10 mt-16 px-4 pb-8 relative max-w-full">
           <h2 className="text-white text-xl md:text-3xl font-bold mb-10 tracking-wide flex items-center gap-4 justify-center text-center break-words whitespace-normal">
             <span className="inline-block h-1 w-8 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
             活動地點 
@@ -391,9 +396,9 @@ export default function Home() {
   <circle cx="50" cy="50" r="45" stroke="NONE" strokeWidth="6" fill="none" />
   
   <text x="50" y="54" 
-        font-family="Arial, sans-serif" 
-        font-size="80"  text-anchor="middle" 
-        dominant-baseline="central" 
+        fontFamily="Arial, sans-serif" 
+        fontSize="80"  textAnchor="middle" 
+        dominantBaseline="central" 
         fill="#22D3EE">P</text>
 </svg>
                     </div>
@@ -416,6 +421,10 @@ export default function Home() {
       <footer className="w-full bg-gradient-to-r from-indigo-950 to-gray-950 py-6 mt-auto text-center relative z-10 max-w-full px-4">
         <div className="text-cyan-100 text-sm tracking-wider select-none break-words whitespace-normal">
           Copyright © 次世代行動創新應用Demo Day
+        </div>
+        {/* 聯繫方式 */}
+        <div className="text-cyan-200 text-xs mt-2 tracking-wide">
+          任何疑問請來信洽詢活動小組：<a href="mailto:eden@impr.com.tw" className="underline hover:text-cyan-300 transition">eden@impr.com.tw</a>
         </div>
       </footer>
       {/* 右下角浮動報名按鈕 (滾動超過600px時出現，AnimatePresence動畫) */}
