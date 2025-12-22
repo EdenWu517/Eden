@@ -3,7 +3,25 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
+// Add fbq type definition to avoid TypeScript errors
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
+const fbq = (...args: any[]) => {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    window.fbq(...args);
+  }
+};
+
 function QualificationModal({ show, onClose }: { show: boolean; onClose: () => void }) {
+  const handleConfirmClick = () => {
+    // Trigger Facebook Pixel event when button is clicked
+    fbq('track', 'CompleteRegistration');
+    onClose();
+  };
+
   if (!show) return null;
   return (
     <div
@@ -32,7 +50,7 @@ function QualificationModal({ show, onClose }: { show: boolean; onClose: () => v
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleConfirmClick}
             className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg font-bold text-lg shadow-md transition"
           >
             確認
